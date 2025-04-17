@@ -3,30 +3,27 @@ package com.lucamanfroi.startuprush.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Torneio {
+public class Battle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer startupQuantity;
-
-    @OneToMany
-    private List<Startup> registeredStartups = new ArrayList<>();
-
+    @ManyToOne
+    private Startup startup1;
 
     @ManyToOne
-    private Startup winner;
+    private Startup startup2;
 
+    @ManyToOne
+    private Torneio torneio;
 
-    private Boolean started = false;
+    @ManyToOne
+    private Startup winner; // Quem vencer a batalha
 }
