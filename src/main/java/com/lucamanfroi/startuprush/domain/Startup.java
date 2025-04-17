@@ -4,11 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Entity
@@ -34,4 +30,10 @@ public class Startup {
     @NotBlank
     @Size(min = 4, max = 30, message = "O slogan precisa ter no mínimo 2 letras, e no máximo 30.")
     private String slogan;
+
+
+    @NotNull
+    @Min(value = 1900, message = "Ano mínimo é 1900")
+    @Max(value = 2025, message = "Ano máximo é 2025.")
+    private Integer anoFuncacao;
 }
