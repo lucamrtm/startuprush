@@ -24,6 +24,10 @@ public class Torneio {
     private List<Startup> registeredStartups = new ArrayList<>();
 
 
+    @OneToMany
+    private List<Startup> ranking = new ArrayList<>();
+
+
     @ManyToOne
     private Startup winner;
 

@@ -22,13 +22,14 @@ public class Startup {
 
     @NotNull
     @NotBlank
-    @Size(min = 4, max = 20, message = "O nome precisa ter no mínimo 4 letras, e no máximo 20.")
-    @Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ\\\\s]+$", message = "O nome deve conter apenas letras e espaços.")
+    @Size(min = 4, max = 30, message = "O nome precisa ter no mínimo 4 letras, e no máximo 30.")
+    @Pattern(regexp = "^[A-Za-zÀ-ÖØ-öø-ÿ ]+$", message = "O nome deve conter apenas letras e espaços.")
+
     private String name;
 
     @NotNull
     @NotBlank
-    @Size(min = 2, max = 30, message = "O slogan precisa ter no mínimo 2 letras, e no máximo 30.")
+    @Size(min = 2, max = 50, message = "O slogan precisa ter no mínimo 2 letras, e no máximo 50.")
     private String slogan;
 
 

@@ -25,5 +25,5 @@ public class Battle {
     private Torneio torneio;
 
     @ManyToOne
-    private Startup winner; // Quem vencer a batalha
+    private Startup winner; // quem vencer a batalha
 }

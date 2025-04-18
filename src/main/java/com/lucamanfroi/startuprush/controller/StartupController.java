@@ -34,7 +34,7 @@ public class StartupController {
 
     // buscar por Id
 
-    @GetMapping("/{Id}")
+    @GetMapping("/{id}")
     public Startup findById(@PathVariable Long id) {
         return startupService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Startup não encontrada."));
