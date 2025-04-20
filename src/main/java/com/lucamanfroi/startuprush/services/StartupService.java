@@ -10,10 +10,20 @@ import java.util.Optional;
 
 @Service
 public class StartupService {
+
     @Autowired
     private StartupRepository startupRepository;
 
-    public Startup save(Startup startup) { return startupRepository.save(startup); }
+    public Startup save(Startup startup) {
+        if (startupRepository.existsByName(startup.getName())) {
+            throw new RuntimeException("Já existe uma startup com esse nome");
+        }
+        if (startupRepository.existsBySlogan(startup.getSlogan())) {
+            throw new RuntimeException("Já existe uma startup com esse slogan");
+        }
+        return startupRepository.save(startup);
+    }
+
     public List<Startup> findAll() { return startupRepository.findAll(); }
     public Optional<Startup> findById(Long id) { return startupRepository.findById(id); }
     public void deleteById(Long id) { startupRepository.deleteById(id); }

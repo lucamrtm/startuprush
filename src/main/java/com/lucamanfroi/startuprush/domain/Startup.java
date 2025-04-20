@@ -1,11 +1,11 @@
 package com.lucamanfroi.startuprush.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -39,4 +39,7 @@ public class Startup {
     private Integer foundationYear;
 
     private Integer score = 70; //começa com 70 pontos
+
+    @ElementCollection
+    private List<Evento> eventosAplicados = new ArrayList<>();
 }

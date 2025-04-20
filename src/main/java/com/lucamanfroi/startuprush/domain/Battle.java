@@ -3,6 +3,9 @@ package com.lucamanfroi.startuprush.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -24,6 +27,15 @@ public class Battle {
     @ManyToOne
     private Torneio torneio;
 
+
     @ManyToOne
-    private Startup winner; // quem vencer a batalha
+    private Startup winner; // comeca nulo
+
+    private Integer round; // Rodada atual
+
+    @ElementCollection
+    private Set<Evento> eventosStartup1 = new HashSet<>();
+
+    @ElementCollection
+    private Set<Evento> eventosStartup2 = new HashSet<>();
 }

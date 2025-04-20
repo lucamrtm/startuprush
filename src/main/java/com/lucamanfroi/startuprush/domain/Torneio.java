@@ -29,8 +29,9 @@ public class Torneio {
 
 
     @ManyToOne
-    private Startup winner;
+    private Startup champion;
 
+    private Integer currentRound = 0; // começa na rodada 0
 
     private Boolean started = false;
 }

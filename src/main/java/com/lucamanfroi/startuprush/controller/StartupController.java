@@ -3,7 +3,6 @@ package com.lucamanfroi.startuprush.controller;
 import com.lucamanfroi.startuprush.services.StartupService;
 import jakarta.validation.Valid;
 import com.lucamanfroi.startuprush.domain.Startup;
-import com.lucamanfroi.startuprush.services.HelloWorldService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
