@@ -4,10 +4,13 @@ import com.lucamanfroi.startuprush.domain.Battle;
 import com.lucamanfroi.startuprush.domain.Evento;
 import com.lucamanfroi.startuprush.domain.Startup;
 import com.lucamanfroi.startuprush.domain.Torneio;
+import com.lucamanfroi.startuprush.dto.BattleResolutionRequest;
 import com.lucamanfroi.startuprush.repository.BattleRepository;
 import com.lucamanfroi.startuprush.repository.TorneioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,6 +25,9 @@ public class BattleService {
 
     @Autowired
     private TorneioService torneioService; // para atualizar o torneio
+
+    @Autowired
+    private StartupService startupService;
 
 
 
@@ -106,8 +112,15 @@ public class BattleService {
 
 
     public Startup resolveBattle(Battle battle) {
-        Startup s1 = battle.getStartup1();
-        Startup s2 = battle.getStartup2();
+        Startup s1 = startupService.findById(battle.getStartup1().getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Startup 1 não encontrada"));
+
+        Startup s2 = startupService.findById(battle.getStartup2().getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Startup 2 não encontrada"));
+
+
+
+
 
         Startup winner;
         Startup loser;
@@ -121,28 +134,33 @@ public class BattleService {
             // empate: shark fight
             if (random.nextBoolean()) {
                 s1.setScore(s1.getScore() + 2);  // +2 pontos para s1
+                startupService.update(s1); // salvar ajuste
                 winner = s1;
                 loser = s2;
             } else {
                 s2.setScore(s2.getScore() + 2);  // +2 pontos para s2
+                startupService.update(s2); // salvar ajuste
                 winner = s2;
                 loser = s1;
             }
         }
 
         winner.setScore(winner.getScore() + 30);
+        startupService.update(winner);
+        startupService.update(loser);
 
         battle.setWinner(winner);
         battleRepository.save(battle);
 
         // adiciona o perdedor no ranking
-        Torneio torneio = battle.getTorneio();
+        Torneio torneio = torneioService.findById(battle.getTorneio().getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Torneio não encontrado"));
+
         torneio.getRanking().add(loser);
         torneioService.save(torneio);
 
         return winner;
     }
-
 
 
 

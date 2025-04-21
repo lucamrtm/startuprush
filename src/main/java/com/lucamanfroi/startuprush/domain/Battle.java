@@ -33,9 +33,9 @@ public class Battle {
 
     private Integer round; // Rodada atual
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Evento> eventosStartup1 = new HashSet<>();
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Evento> eventosStartup2 = new HashSet<>();
 }

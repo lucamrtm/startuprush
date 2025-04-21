@@ -3,6 +3,7 @@ package com.lucamanfroi.startuprush.controller;
 import com.lucamanfroi.startuprush.domain.Battle;
 import com.lucamanfroi.startuprush.domain.Startup;
 import com.lucamanfroi.startuprush.domain.Torneio;
+import com.lucamanfroi.startuprush.dto.BattleResolutionRequest;
 import com.lucamanfroi.startuprush.services.BattleService;
 import com.lucamanfroi.startuprush.services.StartupService;
 import com.lucamanfroi.startuprush.services.TorneioService;
@@ -40,8 +41,9 @@ public class BattleController {
         validateStartupBelongsToBattle(battle, startup);
 
         battleService.applyEvent(battle, startup, event);
-        return startupService.save(startup);
+        return startup;
     }
+
 
     // apenas valida se a startup pertence a batalha
     private void validateStartupBelongsToBattle(Battle battle, Startup startup) {
@@ -53,12 +55,14 @@ public class BattleController {
 
     // Resolver batalha (escolhe o vencedor)
     @PostMapping("/{battleId}/resolve")
-    public Startup resolveBattle(@PathVariable Long battleId) {
+    public Battle resolveBattle(@PathVariable Long battleId) {
         Battle battle = battleService.findById(battleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Batalha não encontrada"));
 
-        return battleService.resolveBattle(battle);
+        battleService.resolveBattle(battle);
+        return battle;
     }
+
 
     // Buscar batalhas da rodada atual
     @GetMapping("/torneio/{torneioId}/current-round")

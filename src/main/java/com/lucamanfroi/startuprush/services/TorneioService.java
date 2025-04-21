@@ -3,6 +3,7 @@ package com.lucamanfroi.startuprush.services;
 
 import com.lucamanfroi.startuprush.domain.*;
 import com.lucamanfroi.startuprush.domain.RankingResponse;
+import com.lucamanfroi.startuprush.dto.RankingGeneralResponse;
 import com.lucamanfroi.startuprush.repository.BattleRepository;
 import com.lucamanfroi.startuprush.repository.StartupRepository;
 import com.lucamanfroi.startuprush.repository.TorneioRepository;
@@ -117,6 +118,8 @@ public class TorneioService {
             torneio.setChampion(winners.get(0));
             // adiciona o campeão no ranking
             torneio.getRanking().add(winners.get(0));
+            torneio.setStarted(false);
+
 
             return torneioRepository.save(torneio);
         }
@@ -135,6 +138,29 @@ public class TorneioService {
         torneio.setStarted(false);
         return torneioRepository.save(torneio);
     }
+
+    public List<RankingGeneralResponse> getRankingGeral() {
+        List<Torneio> torneios = torneioRepository.findAll()
+                .stream()
+                .filter(torneio -> torneio.getChampion() != null)
+                .sorted(Comparator.comparing((Torneio t) -> t.getChampion().getScore()).reversed())
+                .toList();
+
+        List<RankingGeneralResponse> response = new ArrayList<>();
+
+        for (Torneio torneio : torneios) {
+            response.add(new RankingGeneralResponse(
+                    torneio.getId(),
+                    torneio.getChampion().getName(),
+                    torneio.getChampion().getScore(),
+                    torneio.getChampion().getSlogan(),
+                    torneio.getStartupQuantity()
+            ));
+        }
+
+        return response;
+    }
+
 
 
 

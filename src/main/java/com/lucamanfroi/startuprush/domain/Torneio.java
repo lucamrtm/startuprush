@@ -20,12 +20,16 @@ public class Torneio {
 
     private Integer startupQuantity;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "torneio_id_registered")
     private List<Startup> registeredStartups = new ArrayList<>();
 
 
-    @OneToMany
+
+    @OneToMany(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "torneio_id")
     private List<Startup> ranking = new ArrayList<>();
+
 
 
     @ManyToOne

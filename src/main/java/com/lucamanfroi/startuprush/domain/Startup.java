@@ -40,6 +40,6 @@ public class Startup {
 
     private Integer score = 70; //começa com 70 pontos
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Evento> eventosAplicados = new ArrayList<>();
 }

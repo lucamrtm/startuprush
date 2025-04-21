@@ -3,6 +3,7 @@ package com.lucamanfroi.startuprush.controller;
 import com.lucamanfroi.startuprush.domain.RankingResponse;
 import com.lucamanfroi.startuprush.domain.Startup;
 import com.lucamanfroi.startuprush.domain.Torneio;
+import com.lucamanfroi.startuprush.dto.RankingGeneralResponse;
 import com.lucamanfroi.startuprush.services.StartupService;
 import com.lucamanfroi.startuprush.services.TorneioService;
 import jakarta.transaction.Transactional;
@@ -77,6 +78,11 @@ public class TorneioController {
     public List<RankingResponse> getRanking(@PathVariable Long torneioId) {
         return torneioService.getRankingDetalhado(torneioId);
     }
+    @GetMapping("/ranking-geral")
+    public List<RankingGeneralResponse> getRankingGeral() {
+        return torneioService.getRankingGeral();
+    }
+
 
 
 }
