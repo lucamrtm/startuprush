@@ -85,25 +85,57 @@ public class BattleService {
 
     public void createBattlesForRound(Torneio torneio, int round) {
         List<Startup> startups = torneio.getRegisteredStartups();
+        Collections.shuffle(startups); // ainda embaralha para não favorecer
 
-        // embaralha para sorteio justo
-        Collections.shuffle(startups);
+        if (startups.size() == 3) {
+            Startup a = startups.get(0);
+            Startup b = startups.get(1);
+            Startup c = startups.get(2);
 
-        // forma pares de 2 em 2
-        for (int i = 0; i < startups.size(); i += 2) {
-            Startup s1 = startups.get(i);
-            Startup s2 = startups.get(i + 1);
-
-            Battle battle = Battle.builder()
-                    .startup1(s1)
-                    .startup2(s2)
+            // A vs B
+            Battle battle1 = Battle.builder()
+                    .startup1(a)
+                    .startup2(b)
                     .round(round)
                     .torneio(torneio)
                     .build();
+            battleRepository.save(battle1);
 
-            battleRepository.save(battle);
+            // A vs C
+            Battle battle2 = Battle.builder()
+                    .startup1(a)
+                    .startup2(c)
+                    .round(round)
+                    .torneio(torneio)
+                    .build();
+            battleRepository.save(battle2);
+
+            // B vs C
+            Battle battle3 = Battle.builder()
+                    .startup1(b)
+                    .startup2(c)
+                    .round(round)
+                    .torneio(torneio)
+                    .build();
+            battleRepository.save(battle3);
+
+        } else {
+            // Lógica normal de pares de dois em dois
+            for (int i = 0; i < startups.size(); i += 2) {
+                Startup s1 = startups.get(i);
+                Startup s2 = startups.get(i + 1);
+
+                Battle battle = Battle.builder()
+                        .startup1(s1)
+                        .startup2(s2)
+                        .round(round)
+                        .torneio(torneio)
+                        .build();
+                battleRepository.save(battle);
+            }
         }
     }
+
 
     public List<Battle> getBattlesForRound(Torneio torneio, int round) {
         return battleRepository.findByTorneioAndRound(torneio, round);

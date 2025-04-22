@@ -51,10 +51,10 @@ public class TorneioService {
         if(torneio.getRegisteredStartups().size() >= torneio.getStartupQuantity()){
             throw new RuntimeException("Torneio já está cheio");
         }
-//        // Primeiro salva a Startup
+//        // primeiro salva a Startup
 //        Startup savedStartup = startupRepository.save(startup);
 
-        // Depois adiciona ao torneio
+        // depois adiciona ao torneio
         torneio.getRegisteredStartups().add(startup);
         return torneioRepository.save(torneio);
     }
@@ -102,16 +102,33 @@ public class TorneioService {
 
         List<Battle> currentBattles = battleRepository.findByTorneioAndRound(torneio, torneio.getCurrentRound());
 
-        // Verificar se todas batalhas têm vencedor
+        // verificar se todas batalhas têm vencedor
         boolean allBattlesResolved = currentBattles.stream().allMatch(b -> b.getWinner() != null);
         if (!allBattlesResolved) {
             throw new RuntimeException("Ainda há batalhas sem vencedor nesta rodada.");
         }
 
-        // Coletar os vencedores
+        // coletar os vencedores
         List<Startup> winners = new ArrayList<>(currentBattles.stream()
                 .map(Battle::getWinner)
                 .toList());
+
+        if (torneio.getRegisteredStartups().size() == 3 && torneio.getCurrentRound() ==2) {
+            // CASO ESPECIAL: PODIUM
+            // todos entram no ranking
+            torneio.getRanking().addAll(torneio.getRegisteredStartups());
+
+
+            List<Startup> startupsFinalistas = new ArrayList<>(torneio.getRegisteredStartups());
+            // ordena por score
+            startupsFinalistas.sort(Comparator.comparing(Startup::getScore).reversed());
+
+            // campeão é quem ficou em primeiro
+            torneio.setChampion(startupsFinalistas.get(0));
+
+            torneio.setStarted(false);
+            return torneioRepository.save(torneio);
+        }
 
 
         if (winners.size() == 1) {
@@ -124,7 +141,7 @@ public class TorneioService {
             return torneioRepository.save(torneio);
         }
 
-        // Avançar para nova rodada
+        // avança para nova rodada
         torneio.setCurrentRound(torneio.getCurrentRound() + 1);
         torneio.setRegisteredStartups(winners);
 

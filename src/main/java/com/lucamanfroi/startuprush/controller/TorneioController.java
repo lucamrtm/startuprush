@@ -38,8 +38,8 @@ public class TorneioController {
 
     @PostMapping
     public Torneio createTorneio(@RequestParam Integer startupQuantity){
-        if (startupQuantity != 4 && startupQuantity != 8){
-            throw new IllegalArgumentException("São permitidos somente torneios de 4 ou 8 startups!");
+        if (startupQuantity != 4 && startupQuantity != 6 && startupQuantity != 8){
+            throw new IllegalArgumentException("São permitidos somente torneios de 4, 6 ou 8 startups!");
         }
         return torneioService.createTorneio(startupQuantity);
     }
